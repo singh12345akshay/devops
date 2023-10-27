@@ -30,6 +30,7 @@ jobs:
             cd /home/ec2-user/Chatbot  
             # nvm use 18
             npm i
+            npm i sharp
             npm run build
             nohup npm start &
               
