@@ -27,7 +27,7 @@ jobs:
             sudo yum install git -y
             sudo yum install -y nodejs
             git clone https://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@github.com/singh12345akshay/devops.git
-            cd /home/ec2-user/Chatbot  
+            cd /home/ec2-user/devops  
             # nvm use 18
             npm i
             npm i sharp
