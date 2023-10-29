@@ -19,7 +19,7 @@ jobs:
       with:
         image: image
         tags:  latest
-        registry: https://registry.hub.docker.com/v2/ 
+        registry: https://registry.hub.docker.com/v2
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
