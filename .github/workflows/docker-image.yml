@@ -19,7 +19,7 @@ jobs:
       with:
         image: image
         tags:  latest
-        registry: singh12345akshay
+        registry: singh12345akshay/devops1
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
