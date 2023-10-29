@@ -1,0 +1,50 @@
+name: Build and push docker image
+
+on:
+  push:
+    branches:
+      - docker
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - uses: actions/checkout@v3
+      name: Check out code
+
+    - uses: mr-smithers-excellent/docker-build-push@v6
+      name: Build & push Docker image
+      with:
+        image: image
+        tags: ${{Build.BuildId}}, latest
+        registry: https://registry.hub.docker.com/v2/ 
+        dockerfile: Dockerfile
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    # steps:
+    #   - name: Checkout code
+    #     uses: actions/checkout@v2
+
+    #   - name: executing remote ssh commands using password
+    #     uses: docker/build-push-action@v5.0.0
+    #     with:
+    #       # host: ${{ secrets.EC2_HOST }}
+    #       docker_username: ${{ secrets.DOCKER_USERNAME }}
+    #       docker_password: ${{ secrets.DOCKER_PASSWORD }}
+    #       # port: ${{ secrets.PORT }}
+    #       script: |
+    #         docker build -t devopsimage .
+    #         docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+    #         # sudo yum install git
+    #         # ls  /home/ec2-user/
+    #         # sudo yum update
+    #         # sudo yum install git -y
+    #         # sudo yum install -y nodejs
+    #         # git clone https://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@github.com/singh12345akshay/devops.git
+    #         # cd /home/ec2-user/devops  
+
+
+
