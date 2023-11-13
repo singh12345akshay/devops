@@ -68,7 +68,7 @@ jobs:
            username: ${{ secrets.EC2_USER }}
            key: ${{ secrets.KEY_PEM }}
            script: |
-             docker pull singh12345akshay/devops:latest
+             docker pull singh12345akshay/devops1:docker
              docker stop my-container || true
              docker rm my-container || true
              docker run -d -p 80:8080 --name my-container yourusername/your-image:tag
