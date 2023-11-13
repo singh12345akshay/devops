@@ -66,7 +66,7 @@ jobs:
           echo "EC2_USERNAME: ${{ secrets.EC2_USERNAME }}"
           echo "EC2_HOST: ${{ secrets.EC2_HOST }}"
           echo "KEY_PEM: ${{ secrets.KEY_PEM }}"
-          ssh -o -i ${{ secrets.KEY_PEM }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} '
+          ssh -i ${{ secrets.KEY_PEM }} ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} '
           docker pull singh12345akshay/devops1:docker &&
           docker stop my-container || true &&
           docker rm my-container || true &&
