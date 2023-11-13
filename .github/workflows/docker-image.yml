@@ -57,7 +57,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       
     - name: Pull Docker Image
-      run: docker pull singh12345akshay/devops:latest  # Replace with your Docker image details
+      run: docker pull singh12345akshay/devops1:docker  # Replace with your Docker image details
       if: success()
 
   
