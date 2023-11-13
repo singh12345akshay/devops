@@ -1,12 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# GitHub recommends pinning actions to a commit SHA.
-# To get a newer version, you will need to update the SHA.
-# You can also reference a tag or branch, but the action may change without warning.
-
 name: Publish Docker image
 
 on:
@@ -42,55 +33,40 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+  deploy:
+    name: Pull Image and run conatiner
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
+    # - name: Set up Docker
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get -y install docker.io
+    #   if: success()
 
-# name: Build and push docker image
+    - name: Log in to Docker Hub
+      run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      if: success()
 
-# on:
-#   push:
-#     branches:
-#       - docker
+    - name: Pull Docker Image
+      run: docker pull singh12345akshay/devops:latest  # Replace with your Docker image details
+      if: success()
 
-# jobs:
-#   deploy:
-#     runs-on: ubuntu-latest
+    - name: SSH into EC2 and update the container
+      uses: appleboy/ssh-action@v0.7.0
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        key: ${{ secrets.KEY_PEM }}
+        script: |
+          docker pull singh12345akshay/devops:latest  # Replace with your Docker image details
+          docker stop my-container || true
+          docker rm my-container || true
+          docker run -d -p 80:8080 --name my-container singh12345akshay/devops:latest 
 
-#     steps:
-    
-#     - uses: actions/checkout@v3
-#       name: Check out code
-
-#     - uses: mr-smithers-excellent/docker-build-push@v6
-#       name: Build & push Docker image
-#       with:
-#         image: image
-#         tags:  latest
-#         registry: singh12345akshay/devops1
-#         dockerfile: Dockerfile
-#         username: ${{ secrets.DOCKER_USERNAME }}
-#         password: ${{ secrets.DOCKER_PASSWORD }}
-
-    # steps:
-    #   - name: Checkout code
-    #     uses: actions/checkout@v2
-
-    #   - name: executing remote ssh commands using password
-    #     uses: docker/build-push-action@v5.0.0
-    #     with:
-    #       # host: ${{ secrets.EC2_HOST }}
-    #       docker_username: ${{ secrets.DOCKER_USERNAME }}
-    #       docker_password: ${{ secrets.DOCKER_PASSWORD }}
-    #       # port: ${{ secrets.PORT }}
-    #       script: |
-    #         docker build -t devopsimage .
-    #         docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-    #         # sudo yum install git
-    #         # ls  /home/ec2-user/
-    #         # sudo yum update
-    #         # sudo yum install git -y
-    #         # sudo yum install -y nodejs
-    #         # git clone https://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@github.com/singh12345akshay/devops.git
-    #         # cd /home/ec2-user/devops  
-
-
+    - name: Cleanup
+      run: docker system prune -af
+      if: always()
 
