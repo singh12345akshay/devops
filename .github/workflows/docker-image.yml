@@ -54,17 +54,31 @@ jobs:
       run: docker pull singh12345akshay/devops:latest  # Replace with your Docker image details
       if: success()
 
-    - name: SSH into EC2 and update the container
-      uses: appleboy/ssh-action@v0.7.0
+  
+    - name: Deploy to EC2
+      uses: appleboy/ssh-action@master
       with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USERNAME }}
-        key: ${{ secrets.KEY_PEM }}
-        script: |
-          docker pull singh12345akshay/devops:latest  # Replace with your Docker image details
-          docker stop my-container || true
-          docker rm my-container || true
-          docker run -d -p 80:8080 --name my-container singh12345akshay/devops:latest 
+           host: ${{ secrets.EC2_HOST }}
+           username: ${{ secrets.EC2_USER }}
+           key: ${{ secrets.SSH_PRIVATE_KEY }}
+           script: |
+             docker pull singh12345akshay/devops:latest
+             docker stop my-container || true
+             docker rm my-container || true
+             docker run -d -p 80:8080 --name my-container yourusername/your-image:tag
+
+   
+    # - name: SSH into EC2 and update the container
+    #   uses: appleboy/ssh-action@v0.7.0
+    #   with:
+    #     host: ${{ secrets.EC2_HOST }}
+    #     username: ${{ secrets.EC2_USERNAME }}
+    #     key: ${{ secrets.KEY_PEM }}
+    #     script: |
+    #       docker pull singh12345akshay/devops:latest  # Replace with your Docker image details
+    #       docker stop my-container || true
+    #       docker rm my-container || true
+    #       docker run -d -p 80:8080 --name my-container singh12345akshay/devops:latest 
 
     - name: Cleanup
       run: docker system prune -af
